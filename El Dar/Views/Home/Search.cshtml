@@ -1,0 +1,204 @@
+﻿@using ElDarDal.Models.Enums
+<link rel="stylesheet" href="~/css/Search.css" />
+
+@{
+    ViewData["Title"] = "Search";
+}
+
+<div class="search-container">
+    <form action="/Home/SearchData" method="get" class="search-form">
+
+        <h3 class="search-title">Search In</h3>
+        <div class="radio-group target-group">
+            <label class="radio-label">
+                <input type="radio" name="searchTarget" value="Guests" checked />
+                <span class="custom-radio target-radio">Guests 👥</span>
+            </label>
+
+            <label class="radio-label">
+                <input type="radio" name="searchTarget" value="Employees" />
+                <span class="custom-radio target-radio">Employees 💼</span>
+            </label>
+
+            <label class="radio-label">
+                <input type="radio" name="searchTarget" value="Data" />
+                <span class="custom-radio target-radio">Data Log 📊</span>
+            </label>
+        </div>
+
+        <hr class="search-divider" />
+
+        <h3 class="search-title">Search By</h3>
+        <div class="radio-group criteria-group">
+            <label class="radio-label filter-guests filter-employees">
+                <input type="radio" name="searchBy" value="Name" checked />
+                <span class="custom-radio">Name</span>
+            </label>
+
+            <label class="radio-label filter-guests filter-employees">
+                <input type="radio" name="searchBy" value="PhoneNumber" />
+                <span class="custom-radio">Phone Number</span>
+            </label>
+
+            <label class="radio-label filter-guests filter-employees">
+                <input type="radio" name="searchBy" value="CardNumber" />
+                <span class="custom-radio">Card Number</span>
+            </label>
+
+            <label class="radio-label filter-guests filter-employees filter-data">
+                <input type="radio" name="searchBy" value="Date" />
+                <span class="custom-radio">Date</span>
+            </label>
+
+            <label class="radio-label filter-guests filter-employees">
+                <input type="radio" name="searchBy" value="Status" />
+                <span class="custom-radio">Status</span>
+            </label>
+
+            <label class="radio-label filter-employees">
+                <input type="radio" name="searchBy" value="Job" />
+                <span class="custom-radio">Job</span>
+            </label>
+
+            <label class="radio-label filter-data" style="display:none;">
+                <input type="radio" name="searchBy" value="Name" />
+                <span class="custom-radio">Name</span>
+            </label>
+
+            <label class="radio-label filter-data">
+                <input type="radio" name="searchBy" value="Revenues" />
+                <span class="custom-radio">Revenues</span>
+            </label>
+
+            <label class="radio-label filter-data">
+                <input type="radio" name="searchBy" value="Payments" />
+                <span class="custom-radio">Payments</span>
+            </label>
+        </div>
+
+        <hr class="search-divider" />
+
+        <div class="input-container-wrapper">
+
+            <div id="input-text-wrapper" class="dynamic-input">
+                <input class="SearchInput" name="searchQuery" type="text" placeholder="Search here..." />
+            </div>
+
+            <div id="input-date-wrapper" class="dynamic-input" style="display: none;">
+                <input class="SearchInput" name="searchDate" type="date" />
+            </div>
+
+            <div id="input-status-wrapper" class="dynamic-input" style="display: none;">
+                <select class="SearchInput" name="searchStatus">
+                    <option value="" selected disabled hidden>-- Select Status --</option>
+                    @foreach (var status in Enum.GetValues(typeof(Status)))
+                    {
+                        <option value="@status">@status</option>
+                    }
+                </select>
+            </div>
+
+            <div id="input-job-wrapper" class="dynamic-input" style="display: none;">
+                <select class="SearchInput" name="searchJob">
+                    <option value="" selected disabled hidden>-- Select Job --</option>
+                    @foreach (var job in Enum.GetValues(typeof(JobEnum)))
+                    {
+                        <option value="@job">@job</option>
+                    }
+                </select>
+            </div>
+
+            <div id="input-revenues-wrapper" class="dynamic-input" style="display: none;">
+                <select class="SearchInput" name="searchRevenue">
+                    <option value="" selected disabled hidden>-- Select Revenue --</option>
+                    @foreach (var revenue in Enum.GetValues(typeof(Revenues)))
+                    {
+                        <option value="@revenue">@revenue</option>
+                    }
+                </select>
+            </div>
+
+            <div id="input-payments-wrapper" class="dynamic-input" style="display: none;">
+                <select class="SearchInput" name="searchPayment">
+                    <option value="" selected disabled hidden>-- Select Payment --</option>
+                    @foreach (var payment in Enum.GetValues(typeof(Payments)))
+                    {
+                        <option value="@payment">@payment</option>
+                    }
+                </select>
+            </div>
+
+            <button type="submit" class="search-btn">
+                Search 🔍
+            </button>
+        </div>
+
+    </form>
+</div>
+
+<script>
+    document.querySelectorAll('input[name="searchTarget"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            const target = this.value;
+            const criteriaGroup = document.querySelector('.criteria-group');
+
+            criteriaGroup.querySelectorAll('.radio-label').forEach(el => {
+                el.style.display = 'none';
+            });
+
+            if (target === 'Guests') {
+                criteriaGroup.querySelectorAll('.filter-guests').forEach(el => el.style.display = 'inline-block');
+                criteriaGroup.querySelector('input[value="Name"]').checked = true;
+            } else if (target === 'Employees') {
+                criteriaGroup.querySelectorAll('.filter-employees').forEach(el => el.style.display = 'inline-block');
+                criteriaGroup.querySelector('input[value="Name"]').checked = true;
+            } else if (target === 'Data') {
+                criteriaGroup.querySelectorAll('.filter-data').forEach(el => el.style.display = 'inline-block');
+                criteriaGroup.querySelector('input[value="Date"]').checked = true;
+            }
+
+            updateInputFields();
+        });
+    });
+
+    document.querySelectorAll('input[name="searchBy"]').forEach(radio => {
+        radio.addEventListener('change', updateInputFields);
+    });
+
+    function updateInputFields() {
+        const selectedBy = document.querySelector('input[name="searchBy"]:checked')?.value;
+
+        document.querySelectorAll('.dynamic-input').forEach(div => {
+            div.style.display = 'none';
+            const input = div.querySelector('input, select');
+            if(input) input.removeAttribute('required');
+        });
+
+        let targetDivId = '';
+
+        if (selectedBy === 'Date') {
+            targetDivId = 'input-date-wrapper';
+        } else if (selectedBy === 'Status') {
+            targetDivId = 'input-status-wrapper';
+        } else if (selectedBy === 'Job') {
+            targetDivId = 'input-job-wrapper';
+        } else if (selectedBy === 'Revenues') {
+            targetDivId = 'input-revenues-wrapper';
+        } else if (selectedBy === 'Payments') {
+            targetDivId = 'input-payments-wrapper';
+        } else {
+            targetDivId = 'input-text-wrapper';
+        }
+
+        const targetDiv = document.getElementById(targetDivId);
+        if (targetDiv) {
+            targetDiv.style.display = 'block';
+            const input = targetDiv.querySelector('input, select');
+            if(input) input.setAttribute('required', 'required');
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        document.querySelector('input[name="searchTarget"]:checked').dispatchEvent(new Event('change'));
+    });
+</script>

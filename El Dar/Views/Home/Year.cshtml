@@ -1,0 +1,230 @@
+﻿@using ElDarBLL.ViewModel.DataVM
+<link rel="stylesheet" href="~/css/Data.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+@{
+    ViewData["Title"] = "Year";
+}
+@model IEnumerable<DataVM>
+
+<h3>Year Summary From (@ViewBag.ListOfDates[0]) to (@ViewBag.ListOfDates[1]) </h3>
+
+@if (Model != null && Model.Any())
+{
+    @* ----------------- 1. TABLES REVENUES ----------------- *@
+    <h4>All Revenues</h4>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th class="col-name">No.</th>
+                <th class="col-name">Name</th>
+                <th class="col-number">Revenues</th>
+                <th class="col-number">Price</th>
+                <th class="col-number">OutPrice</th>
+                <th class="col-date">Date</th>
+                <th class="col-date">Synced</th>
+                <th class="col-deleted">Deleted</th>
+                <th class="col-notes">Notes</th>
+                <th class="col-notes">Buttons</th>
+            </tr>
+        </thead>
+        @{
+            var ResultPrice = 0;
+            var CounterPrice = 0;
+        }
+        <tbody>
+            @foreach (var data in Model)
+            {
+                if (data.Price.HasValue && data.IsDeleted == "False")
+                {
+                    CounterPrice++;
+                    ResultPrice += (int)data.Price.Value;
+                    <tr>
+                        <td class="col-name">@CounterPrice</td>
+                        <td class="col-name">@data.Name</td>
+                        <td class="col-number">@(data.Revenues.HasValue ? data.Revenues.ToString() : "───")</td>
+                        <td class="col-number">@(data.Price.HasValue ? data.Price.Value.ToString("N2") : "───")</td>
+                        <td class="col-number">@(data.OutPrice.HasValue ? data.OutPrice.Value.ToString("N2") : "───")</td>
+                        <td class="col-date">@(data.Date.ToString("yyyy-MM-dd"))</td>
+                        <td class="col-date">@(data.IsSynced == "True" ? "Synced" : "Not Synced")</td>
+                        <td class="col-deleted">
+                            <form action="ConvertDelete?id=@data.Id" method="post" style="display:inline;">
+                                <button type="submit" class="btn-status @(data.IsDeleted == "True" ? "status-deleted" : "status-active")">
+                                    @(data.IsDeleted == "True" ? "Deleted" : "Not deleted")
+                                </button>
+                            </form>
+                        </td>
+                        <td class="col-notes">@(data.Notes ?? "───")</td>
+                        <td class="col-number" style="white-space: nowrap; width: 120px;">
+                            <a href="/Data/UpdateDataView?id=@data.Id" class="button-edit" style="text-decoration: none;">
+                                <i class="fa-solid fa-pen-to-square" style="color: white; margin-right: 4px;"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <td colspan="10" style="text-align: center; font-weight: bold;">Total Revenues Price: @ResultPrice.ToString("N2")</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <hr />
+
+    @* ----------------- 2. TABLES PAYMENTS ----------------- *@
+    <h4>All Payments</h4>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th class="col-name">No.</th>
+                <th class="col-name">Name</th>
+                <th class="col-number">Payments</th>
+                <th class="col-number">Payment</th>
+                <th class="col-date">Date</th>
+                <th class="col-date">Synced</th>
+                <th class="col-deleted">Deleted</th>
+                <th class="col-notes">Notes</th>
+                <th class="col-notes">Buttons</th>
+            </tr>
+        </thead>
+        @{
+            decimal ResultPayment = 0;
+            var CounterPayment = 0;
+        }
+        <tbody>
+            @foreach (var data in Model!)
+            {
+                if (data.Payment.HasValue && data.IsDeleted == "False")
+                {
+                    CounterPayment++;
+                    ResultPayment += (int)data.Payment.Value;
+                    <tr>
+                        <td class="col-name">@CounterPayment</td>
+                        <td class="col-name">@data.Name</td>
+                        <td class="col-number">@(data.Payments.HasValue ? data.Payments.ToString() : "───")</td>
+                        <td class="col-number">@(data.Payment.HasValue ? data.Payment.Value.ToString("N2") : "───")</td>
+                        <td class="col-date">@(data.Date.ToString("yyyy-MM-dd"))</td>
+                        <td class="col-date">@(data.IsSynced == "True" ? "Synced" : "Not Synced")</td>
+                        <td class="col-deleted">
+                            <form action="ConvertDelete?id=@data.Id" method="post" style="display:inline;">
+                                <button type="submit" class="btn-status @(data.IsDeleted == "True" ? "status-deleted" : "status-active")">
+                                    @(data.IsDeleted == "True" ? "Deleted" : "Not deleted")
+                                </button>
+                            </form>
+                        </td>
+                        <td class="col-notes">@(data.Notes ?? "───")</td>
+                        <td class="col-number" style="white-space: nowrap; width: 120px;">
+                            <a href="/Data/UpdateDataView?id=@data.Id" class="button-edit" style="text-decoration: none;">
+                                <i class="fa-solid fa-pen-to-square" style="color: white; margin-right: 4px;"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <td colspan="9" style="text-align: center; font-weight: bold;">Total Payments: @ResultPayment.ToString("N2")</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <hr />
+
+    @* ----------------- 3. ALL DATA TABLE ----------------- *@
+    <h4>All Data</h4>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th class="col-name">No.</th>
+                <th class="col-name">Name</th>
+                <th class="col-number">Payments</th>
+                <th class="col-number">Price</th>
+                <th class="col-number">OutPrice</th>
+                <th class="col-number">Payment</th>
+                <th class="col-date">Date</th>
+                <th class="col-date">Synced</th>
+                <th class="col-deleted">Deleted</th>
+                <th class="col-notes">Notes</th>
+                <th class="col-notes">Buttons</th>
+            </tr>
+        </thead>
+        @{
+            var CounterPaymentAll = 0;
+            var activeModel = Model.Where(data => data.IsDeleted != "True");
+            decimal ResultPriceAll = activeModel.Sum(data => data.Price ?? 0);
+            decimal ResultPaymentAll = activeModel.Sum(data => data.Payment ?? 0);
+            decimal AllResult = ResultPriceAll - ResultPaymentAll;
+        }
+        <tbody>
+            @foreach (var data in Model!)
+            {
+                CounterPaymentAll++;
+                <tr>
+                    <td class="col-name">@CounterPaymentAll</td> 
+                    <td class="col-name">@data.Name</td>
+                    <td class="col-number">@(data.Payments.HasValue ? data.Payments.ToString() : "───")</td>
+                    <td class="col-number">@(data.Price.HasValue ? data.Price.Value.ToString("N2") : "───")</td>
+                    <td class="col-number">@(data.OutPrice.HasValue ? data.OutPrice.Value.ToString("N2") : "───")</td>
+                    <td class="col-number">@(data.Payment.HasValue ? data.Payment.Value.ToString("N2") : "───")</td>
+                    <td class="col-date">@(data.Date.ToString("yyyy-MM-dd"))</td>
+                    <td class="col-date">@(data.IsSynced == "True" ? "Synced" : "Not Synced")</td>
+                    <td class="col-deleted">
+                        <form action="ConvertDelete?id=@data.Id" method="post" style="display:inline;">
+                            <button type="submit" class="btn-status @(data.IsDeleted == "True" ? "status-deleted" : "status-active")">
+                                @(data.IsDeleted == "True" ? "Deleted" : "Not deleted")
+                            </button>
+                        </form>
+                    </td>
+                    <td class="col-notes">@(data.Notes ?? "───")</td>
+                    <td class="col-number" style="white-space: nowrap; width: 120px;">
+                        <a href="/Data/UpdateDataView?id=@data.Id" class="button-edit" style="text-decoration: none;">
+                            <i class="fa-solid fa-pen-to-square" style="color: white; margin-right: 4px;"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <table class="table" style="margin-top: -1px; border-top: none;">
+        <thead>
+            <tr>
+                <th colspan="5" style="text-align: center; width: 50%;">Total Price</th>
+                <th colspan="6" style="text-align: center; width: 50%;">Total Payment</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td colspan="5" style="text-align: center; font-weight: bold; background-color: #f8f9fa;">@ResultPriceAll.ToString("N2")</td>
+                <td colspan="6" style="text-align: center; font-weight: bold; background-color: #f8f9fa;">@ResultPaymentAll.ToString("N2")</td>
+            </tr>
+        </tbody>
+    </table>
+    <table>
+        <tbody>
+            <tr>
+                <td colspan="5" style="text-align: center; font-weight: bold; background-color: #f8f9fa;">@AllResult.ToString("N2")</td>
+            </tr>
+        </tbody>
+    </table>
+}
+else
+{
+    <table class="table">
+        <tr>
+            <td colspan="11" style="text-align: center;">No data available.</td>
+        </tr>
+    </table>
+}

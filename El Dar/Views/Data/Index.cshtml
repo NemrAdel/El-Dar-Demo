@@ -1,0 +1,135 @@
+﻿@using ElDarBLL.ViewModel.DataVM
+@using ElDarDal.Models.Enums
+@model IEnumerable<DataVM>
+
+@{
+    ViewData["Title"] = "Data";
+}
+<link rel="stylesheet" href="/css/Data.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
+<div class="table-panel">
+    <div id="addGuestContainer" class="main-form" style="margin-top: 20px;">
+        <form action="/Data/CreateData" method="post" id="addGuestForm">
+            <div class="div-inputs">
+                <input style="width: 250px; margin-bottom: 8px;" required name="Name" type="text" placeholder="Name:" autocomplete="off" />
+                <br>
+                <select class="GuestStatus" style="width: 250px; margin-bottom: 8px;"  name="Revenues">
+                    <option value="" selected disabled hidden> -- Select Revenue --</option>
+                    @foreach (var revenue in Enum.GetValues(typeof(Revenues)))
+                    {
+                        <option class="GuestStatus" value="@revenue"> @revenue</option>
+                    }
+                </select>
+                <select class="GuestStatus" style="width: 250px; margin-bottom: 8px;"  name="Payments">
+                    <option value="" selected disabled hidden> -- Select Payment --</option>
+
+                    @foreach (var payment in Enum.GetValues(typeof(Payments)))
+                    {
+                        <option class="GuestStatus" value="@payment">@payment</option>
+                    }
+                </select>
+                <br>
+                <input style="width: 250px; margin-bottom: 8px;" name="Price" type="number" placeholder="Price:" autocomplete="off" />
+                <input style="width: 250px; margin-bottom: 8px;" name="OutPrice" type="number" placeholder="OutPrice:" autocomplete="off" />
+                <br>
+                <input style="width: 250px; margin-bottom: 8px;" name="Payment" type="number" placeholder="Payment:" />
+                <input style="width: 250px; margin-bottom: 8px;" name="Date" value="@ViewBag.SelectedDate" type="date" placeholder="Date:" />
+                <br>
+                <input style="width: 510px; margin-bottom: 8px;" name="Notes" type="text" placeholder="Notes:" autocomplete="off" />
+                <br>
+                <button type="submit" class="button-submit" id="btnSaveEmployee">Save Data</button>
+                <hr>
+            </div>
+        </form>
+    </div>
+</div>
+
+@if (Model != null && Model.Any())
+{
+<table class="table">
+    <thead>
+        <tr>
+            <th class="col-name">Name</th>
+            <th class="col-number">Revenues</th>
+            <th class="col-number">Payments</th>
+            <th class="col-number">Price</th>
+            <th class="col-number">OutPrice</th>
+            <th class="col-number">Payment</th>
+            <th class="col-date">Date</th>
+            <th class="col-notes">Notes</th>
+            <th class="col-notes">Buttons</th>
+        </tr>
+    </thead>
+    @{
+            var activeModel = Model.Where(data => data.IsDeleted != "True");
+            decimal ResultPriceAll = activeModel.Sum(data => data.Price ?? 0);
+            decimal ResultPaymentAll = activeModel.Sum(data => data.Payment ?? 0);
+            decimal AllResult = ResultPriceAll - ResultPaymentAll;
+    }
+    <tbody>
+        @foreach (var data in Model)
+        {
+            <tr>
+                <td class="col-name">@data.Name</td>
+                <td class="col-number">@(data.Revenues.HasValue? data.Revenues.ToString() : "───")</td>
+                <td class="col-number">@(data.Payments.HasValue ? data.Payments.ToString() : "───")</td>
+                <td class="col-number">@(data.Price.HasValue ? data.Price.Value.ToString("N2") : "───")</td>
+                <td class="col-number">@(data.OutPrice.HasValue ? data.OutPrice.Value.ToString("N2") : "───")</td>
+                <td class="col-number">@(data.Payment.HasValue ? data.Payment.Value.ToString("N2") : "───")</td>
+                <td class="col-date">@(data.Date.ToString("yyyy-MM-dd"))</td>
+                <td class="col-notes">@(data.Notes ?? "───")</td>
+                <td class="col-number" style="white-space: nowrap; width: 120px;">
+                    <a href="/Data/UpdateDataView?id=@data.Id" class="button-edit" style="text-decoration: none;">
+                        <i class="fa-solid fa-pen-to-square" style="color: white; margin-right: 4px;"></i>
+                    </a>
+                    <form action="/Data/ConvertDelete?id=@data.Id" method="post" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this Data? ⚠️');">
+                        <button type="submit" class="button-delete">
+                            <i class="fa fa-trash" style="color: white; margin-right: 4px;"></i>
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<table class="table" style="margin-top: -1px; border-top: none;">
+    <thead>
+        <tr>
+            <th colspan="5" style="text-align: center; width: 50%;">Total Price</th>
+            <th colspan="6" style="text-align: center; width: 50%;">Total Payment</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td colspan="5" style="text-align: center; font-weight: bold; background-color: #f8f9fa;">@ResultPriceAll.ToString("N2")</td>
+            <td colspan="6" style="text-align: center; font-weight: bold; background-color: #f8f9fa;">@ResultPaymentAll.ToString("N2")</td>
+        </tr>
+    </tbody>
+</table>
+<table>
+    <tbody>
+        <tr>
+            <td colspan="5" style="text-align: center; font-weight: bold; background-color: #f8f9fa;">@AllResult.ToString("N2")</td>
+        </tr>
+    </tbody>
+</table>
+
+
+}
+else
+{
+    <table class="table">
+        <tr>
+            <td colspan="8" style="text-align: center;">No data available.</td>
+        </tr>
+    </table>
+}
+<div class="dashboard-buttons-container">
+    <a href="/Home/Month?date=@ViewBag.SelectedDate" class="btn btn-primary btn-filter-submit" id="btnMonthSummary">Month Summary</a>
+    <a href="/Home/Year?date=@ViewBag.SelectedDate" class="btn btn-primary btn-filter-submit" id="btnYearSummary">Year Summary</a>
+</div>
+
+

@@ -1,0 +1,308 @@
+﻿<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <title>El-Dar System</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        webview {
+            background-color: #1a1a1a !important;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+            background: #f1f3f4;
+        }
+
+        .browser-header {
+            display: flex;
+            align-items: center;
+            background: #f1f3f4;
+            padding: 2px 20px 0 8px;
+            border-bottom: 1px solid #dadce0;
+            gap: 6px;
+            user-select: none;
+            direction: ltr;
+            flex-shrink: 0;
+        }
+
+        .app-logo {
+            width: 16px;
+            height: 16px;
+            object-fit: contain;
+            margin-right: 4px;
+        }
+
+        .tab-icon {
+            width: 12px;
+            height: 12px;
+            object-fit: contain;
+            flex-shrink: 0;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 2px;
+            align-items: center;
+            padding-bottom: 2px;
+        }
+
+        .nav-btn {
+            background: #ffffff;
+            color: #000000;
+            border: 1px solid #cccccc;
+            outline: none;
+            font-size: 9px;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 1px 3px;
+            border-radius: 3px;
+            transition: all 0.15s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 15px;
+        }
+
+            .nav-btn:hover {
+                background: #000000;
+                color: #ffffff;
+                border-color: #000000;
+            }
+
+        .tabs-container {
+            display: flex;
+            flex: 1;
+            gap: 2px;
+            overflow-x: auto;
+            scrollbar-width: none;
+            align-items: flex-end;
+        }
+
+            .tabs-container::-webkit-scrollbar {
+                display: none;
+            }
+
+        .tab {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 5px;
+            padding: 3px 6px;
+            background: #e3e5e8;
+            border-radius: 4px 4px 0 0;
+            cursor: pointer;
+            min-width: 90px;
+            max-width: 140px;
+            font-size: 11px;
+            color: #4a4a4a;
+            border: none;
+            position: relative;
+            transition: background 0.15s;
+            height: 18px;
+        }
+
+            .tab:hover {
+                background: #dadce0;
+            }
+
+            .tab.active {
+                background: white;
+                color: #000;
+                font-weight: 600;
+                z-index: 2;
+                box-shadow: 0 -1px 2px rgba(0,0,0,0.05);
+            }
+
+        .tab-title {
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            text-align: left;
+            direction: rtl;
+        }
+
+        .close-btn {
+            background: transparent;
+            border: none;
+            outline: none;
+            border-radius: 50%;
+            width: 12px;
+            height: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 6px;
+            cursor: pointer;
+            color: #5f6368;
+            padding: 0;
+        }
+
+            .close-btn:hover {
+                background: #e8eaed;
+                color: #000;
+            }
+
+        .content-area {
+            flex: 1;
+            display: grid;
+            background: #000000;
+            width: 100%;
+            height: 100%;
+        }
+
+        .webview-view {
+            grid-area: 1 / 1;
+            width: 100%;
+            height: 100%;
+            border: none;
+            opacity: 1;
+            z-index: 1;
+            transition: opacity 0.1s;
+            background: #000000;
+        }
+
+            .webview-view.hidden {
+                opacity: 0;
+                z-index: -1;
+                pointer-events: none;
+            }
+    </style>
+</head>
+<body>
+
+    <div class="browser-header">
+
+        <div class="nav-buttons">
+            <button class="nav-btn" onclick="goBack()">←</button>
+            <button class="nav-btn" onclick="goForward()">→</button>
+        </div>
+        <div class="tabs-container" id="tabs-bar"></div>
+    </div>
+
+    <div class="content-area" id="webview-container"></div>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            createNewTab('http://localhost:3005/', 'El-Dar System', false);
+        });
+
+        function createNewTab(url, title = 'تحميل...', closable = true) {
+            const tabId = 'tab-' + Date.now() + Math.random().toString(36).substr(2, 4);
+
+            const tabsBar = document.getElementById('tabs-bar');
+
+            const tabHtml = `
+                <div class="tab" id="btn-${tabId}" onclick="switchTab('${tabId}')">
+                    <span class="tab-title">${title}</span>
+                    ${closable ? `<button class="close-btn" onclick="closeTab(event, '${tabId}')">✕</button>` : ''}
+                </div>
+            `;
+            tabsBar.insertAdjacentHTML('beforeend', tabHtml);
+
+            const container = document.getElementById('webview-container');
+            const webviewHtml = `<webview id="wv-${tabId}" src="${url}" class="webview-view"></webview>`;
+            container.insertAdjacentHTML('beforeend', webviewHtml);
+
+            const webview = document.getElementById(`wv-${tabId}`);
+
+            webview.addEventListener('page-title-updated', (e) => {
+                const titleSpan = document.querySelector(`#btn-${tabId} .tab-title`);
+                if (titleSpan && e.title && e.title !== 'false' && e.title !== 'undefined') {
+                    titleSpan.innerText = e.title;
+                }
+            });
+
+            webview.addEventListener('console-message', (e) => {
+                if (e.message.startsWith('OPEN_NEW_TAB:')) {
+                    const targetUrl = e.message.replace('OPEN_NEW_TAB:', '');
+                    createNewTab(targetUrl, 'تحميل...');
+                }
+            });
+
+            webview.addEventListener('dom-ready', () => {
+                webview.setZoomFactor(1.0);
+
+                webview.executeJavaScript(`
+                    document.addEventListener('auxclick', (e) => {
+                        if (e.button === 1) {
+                            const link = e.target.closest('a');
+                            if (link && link.href) {
+                                e.preventDefault();
+                                console.log('OPEN_NEW_TAB:' + link.href);
+                            }
+                        }
+                    });
+
+                    document.addEventListener('click', (e) => {
+                        if (e.ctrlKey) {
+                            const link = e.target.closest('a');
+                            if (link && link.href) {
+                                e.preventDefault();
+                                console.log('OPEN_NEW_TAB:' + link.href);
+                            }
+                        }
+                    });
+                `);
+            });
+
+            webview.addEventListener('new-window', (e) => {
+                e.preventDefault();
+                createNewTab(e.url, 'تحميل...');
+            });
+
+            switchTab(tabId);
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.webview-view').forEach(w => w.classList.add('hidden'));
+
+            const activeTab = document.getElementById(`btn-${tabId}`);
+            const activeWebview = document.getElementById(`wv-${tabId}`);
+
+            if (activeTab && activeWebview) {
+                activeTab.classList.add('active');
+                activeWebview.classList.remove('hidden');
+            }
+        }
+
+        function closeTab(e, tabId) {
+            e.stopPropagation();
+            const tabBtn = document.getElementById(`btn-${tabId}`);
+            const webview = document.getElementById(`wv-${tabId}`);
+
+            if (tabBtn.classList.contains('active')) {
+                const prevTab = tabBtn.previousElementSibling || tabBtn.nextElementSibling;
+                if (prevTab) {
+                    const prevId = prevTab.id.replace('btn-', '');
+                    switchTab(prevId);
+                }
+            }
+            tabBtn.remove();
+            webview.remove();
+        }
+
+        function goBack() {
+            const activeWebview = document.querySelector('.webview-view:not(.hidden)');
+            if (activeWebview && activeWebview.canGoBack()) activeWebview.goBack();
+        }
+
+        function goForward() {
+            const activeWebview = document.querySelector('.webview-view:not(.hidden)');
+            if (activeWebview && activeWebview.canGoForward()) activeWebview.goForward();
+        }
+    </script>
+</body>
+</html>

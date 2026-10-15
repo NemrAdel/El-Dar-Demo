@@ -1,0 +1,83 @@
+﻿<link rel="stylesheet" href="~/css/Home.css" />
+@{
+    ViewData["Title"] = "Home";
+}
+
+<div class="dashboard-container">
+    <div class="dashboard-header-block">
+        <h3 class="dashboard-title">El-Dar Dashboard</h3>
+        <p class="dashboard-subtitle">Welcome back! Here is your system overview.</p>
+    </div>
+
+    <div class="dashboard-stats-grid">
+        <div class="stat-card guests-card">
+            <div class="stat-icon">👥</div>
+            <div class="stat-info">
+                <span class="stat-label">Number of Guests</span>
+                <span class="stat-value">@ViewBag.Details[0] <small class="stat-total">/ @ViewBag.Details[1]</small></span>
+            </div>
+        </div>
+
+        <div class="stat-card employees-card">
+            <div class="stat-icon">💼</div>
+            <div class="stat-info">
+                <span class="stat-label">Number of Employees</span>
+                <span class="stat-value">@ViewBag.Details[2] <small class="stat-total">/ @ViewBag.Details[3]</small></span>
+            </div>
+        </div>
+
+        <div class="stat-card employees-card">
+            <div class="stat-icon">📊</div>
+            <div class="stat-info">
+                <span class="stat-label">Number of Data</span>
+                <span class="stat-value">@ViewBag.Details[4] <small class="stat-total">/ @ViewBag.Details[5]</small></span>
+            </div>
+        </div>
+        <div class="stat-card buttons-card" style="display: flex; flex-direction: column; gap: 12px; justify-content: center; background: transparent; border: none; box-shadow: none; padding: 0;">
+            <a href="/Home/Month" class="btn btn-primary btn-filter-submit" id="btnSaveEmployee" style="width: 100%; margin: 0;">View Month</a>
+            <a href="/Home/Year" class="btn btn-primary btn-filter-submit" id="btnSaveEmployee" style="width: 100%; margin: 0;">View Year</a>
+        </div>
+
+    </div>
+
+    <div class="dashboard-content-body">
+        <div class="interactive-filter-bar">
+            <form action="Data/GetDataByDate" method="get" class="date-filter-form">
+                <div class="date-input-wrapper">
+                    <input required name="date" type="date" class="form-control custom-date-input" autocomplete="off" />
+                    <button type="submit" class="btn btn-primary btn-filter-submit" id="btnSaveEmployee">View Data By Date</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="menu-control-grid">
+            <div class="control-group-box">
+                <h5 class="group-box-title">📊 Data Operations</h5>
+                <div class="group-box-links">
+                    <a href="/Data/Index" class="btn-dashboard">View Management Data</a>
+                    <a href="/Data/GetAllData" class="btn-dashboard">View Archive Data</a>
+                </div>
+            </div>
+
+            <div class="control-group-box">
+                <h5 class="group-box-title">👤 Guests Operations</h5>
+                <div class="group-box-links">
+                    <a href="/Guest/Index" class="btn-dashboard">Active Guests List</a>
+                    <a href="/Guest/GetAllGuests" class="btn-dashboard">All Guests History</a>
+                </div>
+            </div>
+
+            <div class="control-group-box">
+                <h5 class="group-box-title">💼 Human Resources</h5>
+                <div class="group-box-links">
+                    <a href="/Employee/Index" class="btn-dashboard">Current Staff</a>
+                    <a href="/Employee/GetAllEmployees" class="btn-dashboard">All Employee Records</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="search-accent-wrapper">
+            <a href="/Home/Search" class="btn-dashboard-search">🔍 System Search</a>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,34 @@
+﻿@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="d-flex justify-content-center align-items-center my-5">
+    <div class="card border-0 shadow-sm p-4 p-md-5" style="max-width: 440px; width: 100%; border-radius: 20px; background-color: #ffffff;">
+
+        <!-- الهيدر -->
+        <div class="mb-4">
+            <h2 class="fw-bold text-dark mb-1" style="font-size: 1.8rem;">El-Dar Login</h2>
+            <p class="text-muted small">Welcome back! Please enter your Information</p>
+        </div>
+
+        <form method="post" action="/Login/Login">
+            <div class="mb-3">
+                <label for="username" class="form-label fw-semibold text-secondary small">Username</label>
+                <input type="text" class="form-control py-2 px-3 border-light-subtle rounded-3" id="username" name="username" placeholder="username" required>
+            </div>
+
+            <div class="mb-4">
+                <label for="password" class="form-label fw-semibold text-secondary small">Password</label>
+                <input type="password" class="form-control py-2 px-3 border-light-subtle rounded-3" id="password" name="password" minlength="8" placeholder="••••••••" required>
+            </div>
+
+            <button type="submit" class="btn w-100 py-2.5 rounded-3 text-white fw-bold" style="background-color: #0b132b; border: none; font-size: 0.95rem;">
+                Login
+            </button>
+            <a href="/Login/ForgotPassword" class="text-decoration-none small text-primary fw-semibold d-block text-center mt-3">
+                Forgot Password?
+            </a>
+        </form>
+
+    </div>
+</div>

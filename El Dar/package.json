@@ -1,0 +1,41 @@
+{
+  "name": "el-dar",
+  "version": "1.0.6",
+  "description": "El-Dar Desktop Application",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build-win": "electron-builder --windows",
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "electron-log": "^5.4.4",
+    "electron-updater": "^6.8.3"
+  },
+  "devDependencies": {
+    "dotenv-cli": "^11.0.0",
+    "electron": "^28.0.0",
+    "electron-builder": "^24.0.0"
+  },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "El-Dar"
+    },
+    "files": [
+      "main.js",
+      "index.html",
+      "publish/**/*",
+      "el-dar.ico",
+      "el-dar.png"
+    ],
+    "extraResources": [
+      {
+        "from": "publish",
+        "to": "publish"
+      }
+    ]
+  }
+}

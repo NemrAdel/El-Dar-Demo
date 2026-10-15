@@ -1,0 +1,221 @@
+﻿﻿@import url('https://fonts.googleapis.com/css2?family=El+Messiri:wght@400..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=El+Messiri:wght@400..700&family=Handlee&family=Press+Start+2P&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=El+Messiri:wght@400..700&family=Press+Start+2P&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;600;700&display=swap');
+body {
+    font-weight: bold;
+    background-color: white;
+    color: black;
+    font-weight: 400;
+    /*    font-family: 'Handlee','El Messiri', serif;*/
+    font-family: 'Cairo', sans-serif;
+    text-align: center;
+}
+
+.div-inputs input {
+    background-color: rgb(255, 255, 255);
+    border: silver solid 1.5px;
+    border-radius: 40px;
+    height: 25px;
+    text-align: center;
+    font-size: 15px;
+    font-weight: bold;
+    /*    font-family: 'Handlee','El Messiri', serif;*/
+    color: black;
+    margin-right: 5px;
+}
+
+.div-inputs input::placeholder {
+    color: #747474;
+    font-weight: bold;
+}
+
+.button-submit {
+    /*    font-family: 'Handlee','El Messiri', serif;*/
+    padding: 4px 10px;
+    font-size: 13px;
+    font-weight: bolder;
+    color: black;
+    background-color: white;
+    border: solid black 1px;
+    border-radius: 6px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.button-submit:hover {
+    background-color: black;
+    color: white;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #808080;
+    text-align: center;
+    padding: 6px 10px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+tr:nth-child(even) {
+    background-color: transparent;
+}
+
+
+.table-container {
+    width: 95%;
+    margin: 20px auto;
+    overflow-x: auto;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.button-edit {
+    /*    font-family: 'Handlee', 'El Messiri', sans-serif;*/
+    background-color: black;
+    color: white !important;
+    border: 1px solid black;
+    padding: 4px 5px;
+    font-size: 11px;
+    font-weight: lighter;
+    border-radius: 6px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    transition: all 0.2s ease;
+}
+
+
+.button-delete {
+    /*    font-family: 'Handlee', 'El Messiri', sans-serif;*/
+    background-color: black;
+    color: white;
+    border: 1px solid black;
+    padding: 4px 5px;
+    font-size: 11px;
+    font-weight: lighter;
+    border-radius: 6px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    margin-left: 4px;
+    transition: all 0.2s ease;
+}
+
+.button-edit:hover {
+    background-color: white !important;
+    color: black !important;
+}
+
+.button-delete:hover {
+    background-color: white !important;
+    color: black !important;
+}
+
+.button-edit i, .button-delete i {
+    color: white !important;
+    font-size: 14px;
+    width: auto;
+    height: auto;
+    display: inline-block;
+    transition: color 0.2s ease;
+}
+
+    .button-edit i:hover, .button-delete i:hover {
+        color: black !important;
+    }
+
+
+.btn-status {
+    /*    font-family: 'Handlee', 'El Messiri', sans-serif;*/
+    padding: 4px 12px;
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 20px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.status-deleted {
+    background-color: black;
+    color: white;
+    border-color: black;
+}
+
+    .status-deleted:hover {
+        background-color: #2e7d32;
+        color: white;
+        box-shadow: 0 2px 5px rgba(198, 40, 40, 0.2);
+    }
+
+.status-active {
+    background-color: black;
+    color: white;
+    border-color: black;
+}
+
+
+.status-active:hover {
+    background-color: #c62828;
+    color: white;
+    box-shadow: 0 2px 5px rgba(46, 125, 50, 0.2);
+}
+
+.GuestStatus {
+    background-color: rgb(255, 255, 255);
+    border: silver solid 1.5px;
+    border-radius: 40px;
+    height: 25px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: bolder;
+    /*    font-family: 'Handlee','El Messiri', serif;*/
+    color: black;
+    margin-right: 5px;
+    font-weight: bold;
+    align-content: center;
+    text-align: center;
+}
+
+.PaidOrNot {
+    background-color: rgb(255, 255, 255);
+    border: silver solid 1.5px;
+    border-radius: 40px;
+    height: 25px;
+    text-align: center;
+    font-size: 15px;
+    font-weight: bolder;
+    /*    font-family: 'Handlee','El Messiri', serif;*/
+    color: black;
+    margin-right: 5px;
+    font-weight: bold;
+    align-content: center;
+    text-align: center;
+}
+
+.col-name {
+    white-space: nowrap;
+}
+
+.col-deleted, .col-synced, .col-paid {
+    white-space: nowrap;
+    text-align: center;
+    width: 95px;
+}
+
+.col-notes {
+    max-width: 300px;
+    min-width: 100px;
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}

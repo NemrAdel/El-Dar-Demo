@@ -1,0 +1,155 @@
+﻿@using ElDarBLL.Helpers
+@using ElDarBLL.ViewModel.DataVM
+@model PaginatedList<DataVM>
+
+<link rel="stylesheet" href="/css/Data.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+@{
+    ViewData["Title"] = "All Data";
+}
+
+<h3>All Data</h3>
+<br>
+
+@if (Model != null && Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th class="col-name">No.</th>
+                <th class="col-name">Name</th>
+                <th class="col-number">Revenues</th>
+                <th class="col-number">Payments</th>
+                <th class="col-number">Price</th>
+                <th class="col-number">OutPrice</th>
+                <th class="col-number">Payment</th>
+                <th class="col-date">Date</th>
+                <th class="col-date">Synced</th>
+                <th class="col-date">Deleted</th>
+                <th class="col-notes">Notes</th>
+                <th class="col-notes">Buttons</th>
+            </tr>
+        </thead>
+        @{
+            var Counter = 0;
+            var activeModel = Model.Where(data => data.IsDeleted != "True");
+            decimal ResultPriceAll = activeModel.Sum(data => data.Price ?? 0);
+            decimal ResultPaymentAll = activeModel.Sum(data => data.Payment ?? 0);
+            decimal AllResult = ResultPriceAll - ResultPaymentAll;
+
+        }
+        <tbody>
+            @foreach (var data in Model)
+            {
+                Counter++;
+                <tr>
+                    <td class="col-name">@Counter</td>
+                    <td class="col-name">@data.Name</td>
+                    <td class="col-number">@(data.Revenues.HasValue? data.Revenues.ToString() : "───")</td>
+                    <td class="col-number">@(data.Payments.HasValue? data.Payments.ToString() : "───")</td>
+                    <td class="col-number">@(data.Price.HasValue? data.Price.Value.ToString("N2") : "───")</td>
+                    <td class="col-number">@(data.OutPrice.HasValue? data.OutPrice.Value.ToString("N2") : "───")</td>
+                    <td class="col-number">@(data.Payment.HasValue? data.Payment.Value.ToString("N2") : "───")</td>
+                    <td class="col-date">@(data.Date.ToString("yyyy-MM-dd"))</td>
+                    <td class="col-date">@(data.IsSynced == "True" ? "Synced" : "Not Synced")</td>
+                    <td class="col-deleted">
+                        <form action="ConvertDelete?id=@data.Id" method="post" style="display:inline;">
+                            <button type="submit" class="btn-status @(data.IsDeleted == "True" ? "status-deleted" : "status-active")">
+                                @(data.IsDeleted == "True" ? "Deleted" : "Not deleted")
+                            </button>
+                        </form>
+                    </td>
+                    <td class="col-notes">@(data.Notes ?? "───")</td>
+                    <td class="col-number" style="white-space: nowrap; width: 120px;">
+                        <a href="/Data/UpdateDataView?id=@data.Id" class="button-edit"  style="text-decoration: none;">
+                            <i class="fa-solid fa-pen-to-square" style="color: white; margin-right: 4px;"></i>
+                        </a>
+                        <form action="/Data/DeleteData?id=@data.Id" method="post" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this Data? ⚠️');">
+                            <button type="submit" class="button-delete">
+                                <i class="fa fa-trash" style="color: white; margin-right: 4px;"></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <table class="table" style="margin-top: -1px; border-top: none;">
+        <thead>
+            <tr>
+                <th colspan="5" style="text-align: center; width: 50%;">Total Price</th>
+                <th colspan="6" style="text-align: center; width: 50%;">Total Payment</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td colspan="5" style="text-align: center; font-weight: bold; background-color: #f8f9fa;">@ResultPriceAll.ToString("N2")</td>
+                <td colspan="6" style="text-align: center; font-weight: bold; background-color: #f8f9fa;">@ResultPaymentAll.ToString("N2")</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table>
+        <tbody>
+            <tr>
+                <td colspan="5" style="text-align: center; font-weight: bold; background-color: #f8f9fa;">@AllResult.ToString("N2")</td>
+            </tr>
+        </tbody>
+    </table>
+
+
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; margin-top: 25px; margin-bottom: 15px;">
+
+        <div style="display: flex; gap: 6px; align-items: center; justify-content: center; font-size: 15px; flex-wrap: wrap;">
+
+            @if (Model.HasPreviousPage)
+            {
+                <a asp-action="GetAllData" asp-route-pageNumber="@(Model.PageIndex - 1)" style="text-decoration: none; color: #0d6efd; font-weight: 600; padding: 2px 6px;">Previous</a>
+            }
+            else
+            {
+                <span style="color: #94a3b8; cursor: not-allowed; padding: 2px 6px;">Previous</span>
+            }
+
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                if (i == Model.PageIndex)
+                {
+                    <span style="font-weight: bold; color: #0d6efd; text-decoration: underline; text-underline-offset: 4px; padding: 2px 6px;">@i</span>
+                }
+                else
+                {
+                    <a asp-action="GetAllData" asp-route-pageNumber="@i" style="text-decoration: none; color: #0d6efd; padding: 2px 6px;">@i</a>
+                }
+            }
+
+            @if (Model.HasNextPage)
+            {
+                <a asp-action="GetAllData" asp-route-pageNumber="@(Model.PageIndex + 1)" style="text-decoration: none; color: #0d6efd; font-weight: 600; padding: 2px 6px;">Next</a>
+            }
+            else
+            {
+                <span style="color: #94a3b8; cursor: not-allowed; padding: 2px 6px;">Next</span>
+            }
+
+        </div>
+
+        <div>
+            <span style="color: #64748b; font-size: 13px;">
+                Page <b>@Model.PageIndex</b> of <b>@Model.TotalPages</b> (Total Records: <b>@Model.TotalCount</b>)
+            </span>
+        </div>
+
+    </div>
+}
+else
+{
+    <table class="table">
+        <tr>
+            <td colspan="8" style="text-align: center;">No data available.</td>
+        </tr>
+    </table>
+}
+                

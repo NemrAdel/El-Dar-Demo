@@ -1,0 +1,50 @@
+﻿@using ElDarBLL.ViewModel.DataVM
+@using ElDarDal.Models.Enums
+@using System.Text.RegularExpressions
+@model DataVM
+
+@{
+    ViewData["Title"] = "UpdateData";
+}
+
+<link rel="stylesheet" href="/css/Data.css" />
+
+
+
+<br>
+<form action="/Data/UpdateData?id=@Model.Id" method="post" id="updateEmployeeForm">
+    <input type="hidden" name="ReturnUrl" value="@ViewBag.ReturnUrl" />
+    <input type="hidden" name="Id" value="@Model.Id" />
+    <div class="div-inputs">
+        <input style="width: 250px; margin-bottom: 8px;" required name="Name" value="@Model.Name" type="text" placeholder="Name:" autocomplete="off" />
+        <br>
+        <select class="GuestStatus" style="width: 250px; margin-bottom: 8px;" name="Revenues">
+            <option value="">-- Select Revenue --</option>
+            @foreach (var revenue in Enum.GetValues(typeof(Revenues)))
+            {
+                bool isSelected = Model.Revenues != null && revenue.ToString() == Model.Revenues.ToString();
+                <option value="@revenue" selected="@(isSelected ? "selected" : null)">@revenue</option>
+            }
+        </select>
+        <select class="GuestStatus" style="width: 250px; margin-bottom: 8px;" name="Payments">
+            <option value="">-- Select Payment --</option>
+            @foreach (var payment in Enum.GetValues(typeof(Payments)))
+            {
+                bool isSelected = Model.Payments != null && payment.ToString() == Model.Payments.ToString();
+                <option value="@payment" selected="@(isSelected ? "selected" : null)">@payment</option>
+            }
+        </select>
+        <br>
+        <input style="width: 250px; margin-bottom: 8px;" name="Price" value="@Model.Price" type="number" placeholder="Price:" autocomplete="off" />
+        <input style="width: 250px; margin-bottom: 8px;" name="OutPrice" value="@Model.OutPrice" type="number" placeholder="OutPrice:" autocomplete="off" />
+        <br>
+        <input style="width: 250px; margin-bottom: 8px;" name="Payment" value="@Model.Payment" type="number" placeholder="Payment:" />
+        <input style="width: 250px; margin-bottom: 8px;" name="Date" value="@Model.Date.ToString("yyyy-MM-dd")" type="date" placeholder="Date:" />
+        <br>
+        <input style="width: 510px; margin-bottom: 8px;" name="Notes" value="@Model.Notes" type="text" placeholder="Notes:" autocomplete="off" />
+        <br>
+        <button type="submit" class="button-submit" id="btnSaveEmployee">Update @(Model.Name.Trim().Split(" ")[0])</button>
+        <hr>
+    </div>
+</form>
+

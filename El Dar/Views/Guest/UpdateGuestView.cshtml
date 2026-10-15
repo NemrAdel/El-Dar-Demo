@@ -1,0 +1,56 @@
+﻿@using ElDarBLL.ViewModel.GuestVM
+@using ElDarDal.Models.Enums
+@using System.Text.RegularExpressions
+@model GuestVM
+
+@{
+    ViewData["Title"] = "UpdateGuest";
+}
+
+<link rel="stylesheet" href="/css/Data.css" />
+
+
+
+<br>
+<form action="/Guest/UpdateGuest?id=@Model.Id" method="post" id="updateGuestForm">
+    <input type="hidden" name="Id" value="@Model.Id" />
+    <input type="hidden" name="ReturnUrl" value="@ViewBag.ReturnUrl" />
+    <div class="div-inputs">
+        <input style="width: 250px; margin-bottom: 8px;" required name="Name" type="text" placeholder="Name:" value="@Model.Name" autocomplete="off" />
+        <input style="width: 250px; margin-bottom: 8px;" required name="PhoneNumber" type="text" inputmode="numeric" placeholder="Phone Number:" maxlength="11" pattern="^01[0125][0-9]{8}$" value="@Model.PhoneNumber" autocomplete="off" />
+        <br>
+        <input style="width: 250px; margin-bottom: 8px;" required name="CardNumber" type="text" inputmode="numeric" placeholder="CardNumber :" maxlength="14" pattern="^[0-9]{14}$" value="@Model.CardNumber" autocomplete="off" />
+        <br>
+        <input style="width: 250px; margin-bottom: 8px;" name="Address" type="text" placeholder="Address:" value="@Model.Address" autocomplete="off" />
+        <input style="width: 250px; margin-bottom: 8px;" required name="Price" type="number" placeholder="Price:" value="@Model.Price.ToString()" />
+        <br>
+        <input style="width: 250px; margin-bottom: 8px;" name="OutPrice" type="number" placeholder="Out Price:" value="@Model.OutPrice.ToString()" />
+        <input style="width: 250px; margin-bottom: 8px;" name="DateOfBirth" type="date" onblur="(this.type='text')" onfocus="onfocus=" (this.type='date' )"" placeholder="Date of Birth:" value="@Model.DateOfBirth?.ToString("yyyy-MM-dd")" />
+        <br>
+        <select class="GuestStatus" style="width: 250px; margin-bottom: 8px;" name="Status">
+            @foreach(var status in Enum.GetValues(typeof(Status)))
+            {
+                @if(Model.Status !=null && status.ToString() == Model.Status.ToString())
+                {
+                    <option class="GuestStatus" value="@status" selected>@status</option>
+                }
+                else
+                {
+                <option class="GuestStatus" value="@status">@status</option>
+                }
+            }
+        </select>
+        @* @{
+            string Paid = Model.IsPaid == "True" ? "Paid" : "Not Paid";
+        } *@
+        <select class="PaidOrNot" style="width: 250px; margin-bottom: 8px;" name="IsPaid">
+            <option class="PaidOrNot" value="True" selected="@(Model.IsPaid!.ToString() == "True" ? "selected" : null)">Paid</option>
+            <option class="PaidOrNot" value="False" selected="@(Model.IsPaid!.ToString() == "False" ? "selected" : null)">Not Paid</option>
+        </select>
+        <br>
+        <input style="width: 510px; margin-bottom: 8px;" name="Notes" type="text" placeholder="Notes:" value="@Model.Notes" autocomplete="off" />
+        <br>
+        <button type="submit" class="button-submit">Update @(Model.Name.Trim().Split(" ")[0])</button>
+    </div>
+</form> 
+

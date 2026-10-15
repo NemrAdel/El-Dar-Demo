@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 18
+VisualStudioVersion = 18.9.12009.208 insiders
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElDarPl", "El Dar\ElDarPl.csproj", "{D65CDA52-3387-45A2-B816-F11074D45336}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElDarDal", "ElDarDal\ElDarDal.csproj", "{B88E6F0A-EEAD-4075-9EDA-D7752B1EF88B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElDarBLL", "ElDarBLL\ElDarBLL.csproj", "{78D1A39C-53F5-49E1-9BCD-D1E4392FB832}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D65CDA52-3387-45A2-B816-F11074D45336}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D65CDA52-3387-45A2-B816-F11074D45336}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D65CDA52-3387-45A2-B816-F11074D45336}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D65CDA52-3387-45A2-B816-F11074D45336}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B88E6F0A-EEAD-4075-9EDA-D7752B1EF88B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B88E6F0A-EEAD-4075-9EDA-D7752B1EF88B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B88E6F0A-EEAD-4075-9EDA-D7752B1EF88B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B88E6F0A-EEAD-4075-9EDA-D7752B1EF88B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{78D1A39C-53F5-49E1-9BCD-D1E4392FB832}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78D1A39C-53F5-49E1-9BCD-D1E4392FB832}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78D1A39C-53F5-49E1-9BCD-D1E4392FB832}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78D1A39C-53F5-49E1-9BCD-D1E4392FB832}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BD3688CC-5087-4814-AD29-FFB8B8AE070E}
+	EndGlobalSection
+EndGlobal

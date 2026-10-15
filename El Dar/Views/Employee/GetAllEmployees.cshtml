@@ -1,0 +1,142 @@
+﻿@using ElDarBLL.Helpers
+@using ElDarBLL.ViewModel.EmployeeVM
+@model PaginatedList<EmployeeVM>
+
+<style>
+.table-container {
+    position: relative;
+    right: 70px; 
+}
+</style>
+
+<link rel="stylesheet" href="/css/Data.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+@{
+    ViewData["Title"] = "All Employees";
+}
+
+<h3>All Employees</h3>
+<br>
+@if (Model != null && Model.Any())
+{
+    var Counter = 0;
+    <div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th class="col-name">No.</th>
+                <th class="col-name">Name</th>
+                <th class="col-number">PhoneNumber</th>
+                <th class="col-name">CardNumber</th>
+                <th class="col-name">Address</th>
+                <th class="col-name">Job</th>
+                <th class="col-name">Status</th>
+                <th class="col-number">Salary</th>
+                <th class="col-number">Adds</th>
+                <th class="col-name">Taxs</th>
+                <th class="col-name">Total</th>
+                <th class="col-number">Age</th>
+                <th class="col-date">DateOfBirth</th>
+                <th class="col-paid">Paid</th>
+                <th class="col-deleted">Deleted</th>
+                <th class="col-notes">Notes</th>
+                <th class="col-number">Buttons</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var employee in Model)
+            {
+                Counter++;
+                <tr>
+                    <td class="col-name">@Counter</td>
+                    <td class="col-name">@employee.Name</td>
+                    <td class="col-number">@employee.PhoneNumber</td>
+                    <td class="col-name">@employee.CardNumber</td>
+                    <td class="col-name">@employee.Address</td>
+                    <td class="col-name">@employee.Job</td>
+                    <td class="col-name">@employee.Status</td>
+                    <td class="col-number">@employee.Salary.ToString("N2")</td>
+                    <td class="col-number">@(employee.Adds.HasValue? employee.Adds.Value.ToString("N2") : "───")</td>
+                    <td class="col-number">@(employee.Taxs.HasValue ? employee.Taxs.Value.ToString("N2") : "───")</td>
+                    <td class="col-number">@employee.Total.ToString("N2")</td>
+                    <td class="col-number">@employee.Age.ToString()</td>
+                    <td class="col-date">@employee.DateOfBirth?.ToString("yyyy-MM-dd")</td>
+                    <td class="col-paid">@(employee.IsPaid == "True" ? "Paid" : "Not paid")</td>
+                    <td class="col-deleted">
+                        <form action="ConvertDelete?id=@employee.Id" method="post" style="display:inline;">
+                        <button type="submit" class="btn-status @(employee.IsDeleted == "True" ? "status-deleted" : "status-active")">
+                            @(employee.IsDeleted == "True" ? "Deleted" : "Not deleted")</button>
+                        </form>
+                    </td>
+                    <td class="col-notes">@(!string.IsNullOrEmpty(employee.Notes) ? employee.Notes : "───")</td>
+                    <td class="col-id" style="white-space: nowrap; width: 120px;">
+                        <a href="/Employee/UpdateEmployeeView?id=@employee.Id" class="button-edit" style="text-decoration: none;">
+                            <i class="fa-solid fa-pen-to-square" style="color: white; margin-right: 4px;"></i>
+                        </a>
+                        <form action="/Employee/DeleteEmployee?id=@employee.Id" method="post" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this Data? ⚠️');">
+                        <button type="submit" class="button-delete">
+                            <i class="fa fa-trash" style="color: white; margin-right: 4px;"></i>
+                        </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+    </div>
+
+
+<div style="display: flex; flex-direction: column; align-items: center; gap: 8px; margin-top: 25px; margin-bottom: 15px;">
+
+    <div style="display: flex; gap: 6px; align-items: center; justify-content: center; font-size: 15px; flex-wrap: wrap;">
+
+        @if (Model.HasPreviousPage)
+        {
+            <a asp-action="GetAllEmployees" asp-route-pageNumber="@(Model.PageIndex - 1)" style="text-decoration: none; color: #0d6efd; font-weight: 600; padding: 2px 6px;">Previous</a>
+        }
+        else
+        {
+            <span style="color: #94a3b8; cursor: not-allowed; padding: 2px 6px;">Previous</span>
+        }
+
+        @for (int i = 1; i <= Model.TotalPages; i++)
+        {
+            if (i == Model.PageIndex)
+            {
+                <span style="font-weight: bold; color: #0d6efd; text-decoration: underline; text-underline-offset: 4px; padding: 2px 6px;">@i</span>
+            }
+            else
+            {
+                <a asp-action="GetAllEmployees" asp-route-pageNumber="@i" style="text-decoration: none; color: #0d6efd; padding: 2px 6px;">@i</a>
+            }
+        }
+
+        @if (Model.HasNextPage)
+        {
+            <a asp-action="GetAllEmployees" asp-route-pageNumber="@(Model.PageIndex + 1)" style="text-decoration: none; color: #0d6efd; font-weight: 600; padding: 2px 6px;">Next</a>
+        }
+        else
+        {
+            <span style="color: #94a3b8; cursor: not-allowed; padding: 2px 6px;">Next</span>
+        }
+
+    </div>
+
+    <div>
+        <span style="color: #64748b; font-size: 13px;">
+            Page <b>@Model.PageIndex</b> of <b>@Model.TotalPages</b> (Total Records: <b>@Model.TotalCount</b>)
+        </span>
+    </div>
+
+</div>
+}
+else
+{
+    <table class="data-table">
+        <tr>
+            <td colspan="14" style="text-align:center; padding: 20px;">No Employees For Now</td>
+        </tr>
+    </table>
+}
