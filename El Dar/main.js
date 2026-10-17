@@ -165,7 +165,7 @@ app.whenReady().then(() => {
         autoUpdater.setFeedURL({
             provider: 'github',
             owner: 'NemrAdel',
-            repo: 'El-Dar',
+            repo: 'El-Dar-Demo',
             private: true,
             token: process.env.GH_TOKEN
         });
@@ -186,12 +186,14 @@ app.on('window-all-closed', () => {
 });
 
 autoUpdater.on('update-available', () => {
-    dialog.showMessageBox({
-        type: 'info',
-        title: '✨ Update Available 🚀',
-        message: '⚡ A new version has been found! Downloading the updates in the background... Please wait. ⏳',
-        buttons: ['OK 👍']
-    });
+    // dialog.showMessageBox({
+    //     type: 'info',
+    //     title: '✨ Update Available 🚀',
+    //     message: '⚡ A new version has been found! Downloading the updates in the background... Please wait. ⏳',
+    //     buttons: ['OK 👍']
+    // });
+
+    autoUpdater.logger.info('✨ [INFO] A new version is available, downloading silently...');
 });
 
 autoUpdater.on('download-progress', (progressObj) => {
@@ -199,22 +201,26 @@ autoUpdater.on('download-progress', (progressObj) => {
 });
 
 autoUpdater.on('update-downloaded', () => {
-    dialog.showMessageBox({
-        type: 'info',
-        title: 'Update Ready 🎉',
-        message: '✅ The new version has been successfully downloaded! The application will restart now to apply the updates. 🔄',
-        buttons: ['Install & Restart 🛠️']
-    }).then(() => {
-        autoUpdater.quitAndInstall();
-    });
+    // dialog.showMessageBox({
+    //     type: 'info',
+    //     title: 'Update Ready 🎉',
+    //     message: '✅ The new version has been successfully downloaded! The application will restart now to apply the updates. 🔄',
+    //     buttons: ['Install & Restart 🛠️']
+    // }).then(() => {
+    //     autoUpdater.quitAndInstall();
+    // });
+
+    autoUpdater.logger.error("❌ Auto-update error (Silent):", err);
 });
 
 autoUpdater.on('error', (err) => {
-    autoUpdater.logger.error("❌ Auto-update error:", err);
-    dialog.showMessageBox({
-        type: 'error',
-        title: 'Update Error ❌',
-        message: `An error occurred while downloading the update:\n\n${err.stack || err.message || err.toString()}`,
-        buttons: ['OK']
-    });
+    // autoUpdater.logger.error("❌ Auto-update error:", err);
+    // dialog.showMessageBox({
+    //     type: 'error',
+    //     title: 'Update Error ❌',
+    //     message: `An error occurred while downloading the update:\n\n${err.stack || err.message || err.toString()}`,
+    //     buttons: ['OK']
+    // });
+
+
 });
