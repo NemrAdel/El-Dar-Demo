@@ -2,6 +2,10 @@
 *.db
 *.db-shm
 *.db-wal
-/bin
-/obj
-/node_modules
+bin/
+obj/
+node_modules/
+publish/
+dist/
+.vs/
+*.user
